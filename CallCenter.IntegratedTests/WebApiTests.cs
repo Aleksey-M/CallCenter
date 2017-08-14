@@ -13,7 +13,7 @@ namespace CallCenter.UI.Tests
     public class WebApiTests
     {
 #warning Перед запуском тестов должно быть запущено Web-приложение и обновлен номер порта. Используется рабочая база данных        
-        private string BaseAddress { get { return "http://localhost:56712/"; } }
+        private string BaseAddress { get { return "http://localhost:63964/"; } }
         private HttpClient GetClient()
         {
             var client = new HttpClient()

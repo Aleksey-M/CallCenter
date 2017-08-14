@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -27,7 +28,10 @@ namespace CallCenter.IntegratedTests
                 .AddEntityFrameworkSqlServer()
                 .BuildServiceProvider();
             var b = new DbContextOptionsBuilder<DataBaseContext>();
-            b.UseSqlServer("Server=ANTARES\\SQLEXPRESS;Database=CallCenter;Trusted_Connection=True;").UseInternalServiceProvider(serviceProvider);
+            b.UseSqlServer("Server=.\\SQLExpress;AttachDbFilename={AppDomain.CurrentDomain.BaseDirectory}\\CallCenterBase.mdf;Database=CallCenterDb; Trusted_Connection=Yes;").UseInternalServiceProvider(serviceProvider);
+            //$"Data Source=(localdb)\v11.0;AttachDbFileName={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CallCenterBase.mdf")};Integrated Security=true;
+            //Server=ANTARES\\SQLEXPRESS;Database=CallCenter;Trusted_Connection=True;
+            //Server=.\\SQLExpress;AttachDbFilename={AppDomain.CurrentDomain.BaseDirectory}\\CallCenterBase.mdf;Database=CallCenterDb; Trusted_Connection=Yes;
             var context = new DataBaseContext(b.Options);
             context.Database.EnsureCreated();
             context.Calls.RemoveRange(context.Calls);
