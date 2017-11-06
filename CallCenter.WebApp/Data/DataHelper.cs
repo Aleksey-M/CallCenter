@@ -11,7 +11,7 @@ namespace CallCenter.Data
             context.Persons.Add(new Person
             {
                 PersonId = Guid.Empty,
-                BirthDate = DateTime.Parse("20.05.1990").AddYears(DateTime.Now.Year - 1990 - 27),//27
+                BirthDate = DateTime.Now.Date.AddYears(-27).AddMonths(5).AddDays(20), //27
                 FirstName = "Алена",
                 Patronymic = "Викторовна",
                 LastName = "Михайлюк",
@@ -21,7 +21,7 @@ namespace CallCenter.Data
             context.Persons.Add(new Person
             {
                 PersonId = Guid.Empty,
-                BirthDate = DateTime.Parse("18.03.1998").AddYears(DateTime.Now.Year - 1998 - 19), //19
+                BirthDate = DateTime.Now.Date.AddYears(-19).AddMonths(3).AddDays(18), //19
                 FirstName = "Евгений",
                 Patronymic = "Павлович",
                 LastName = "Мостовой",
@@ -31,7 +31,7 @@ namespace CallCenter.Data
             context.Persons.Add(new Person()
             {
                 PersonId = Guid.Empty,
-                BirthDate = DateTime.Parse("7.11.2004").AddYears(DateTime.Now.Year - 2004 - 13), //13
+                BirthDate = DateTime.Now.Date.AddYears(-13).AddMonths(11).AddDays(7), //13
                 FirstName = "Ольга",
                 Patronymic = "Владимировна",
                 LastName = "Кожемякина",
@@ -41,7 +41,7 @@ namespace CallCenter.Data
             context.Persons.Add(new Person()
             {
                 PersonId = Guid.Empty,
-                BirthDate = DateTime.Parse("17.06.2000").AddYears(DateTime.Now.Year - 2000 - 21), //17
+                BirthDate = DateTime.Now.Date.AddYears(-17).AddMonths(6).AddDays(17), //17
                 FirstName = "Людмила",
                 Patronymic = "Семеновна",
                 LastName = "Довгополая",
