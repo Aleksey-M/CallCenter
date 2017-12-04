@@ -1,14 +1,17 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using CallCenter.NgWebApp.Data;
 
 namespace CallCenter.NgWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly DataBaseContext _dbContext;
+        public HomeController(DataBaseContext c)
+        {
+            _dbContext = c;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -18,6 +21,12 @@ namespace CallCenter.NgWebApp.Controllers
         {
             ViewData["RequestId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
             return View();
+        }
+        
+        public IActionResult CreateTestData()
+        {
+            DataHelper.AddTestData(_dbContext);
+            return Redirect("Index");
         }
     }
 }

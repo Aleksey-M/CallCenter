@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+#define RUN_ON_INMEMORY_DB
+using CallCenter.NgWebApp.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,7 +21,18 @@ namespace CallCenter.NgWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+            services.AddEntityFrameworkSqlServer();
+            services.AddLogging();
+#if RUN_ON_INMEMORY_DB
+            services.AddDbContextPool<DataBaseContext>(options => options.UseInMemoryDatabase("VirtualDB"));            
+#else
+            var connectionStr = Configuration.GetConnectionString("LocalDb");
+            services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(connectionStr));
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
