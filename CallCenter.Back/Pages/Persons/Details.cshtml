@@ -1,0 +1,94 @@
+﻿@page
+@model CallCenter.Back.Pages.Persons.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Person</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Person.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Person.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.Patronymic)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Person.Patronymic)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.BirthDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Person.BirthDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.Gender)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Person.Gender)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Person.PhoneNumber)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Person.PersonId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Calls[0].CallDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Calls[0].OrderCost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Calls[0].CallReport)
+            </th>
+            @*<th></th>-->*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Calls)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CallDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CallReport)
+            </td>
+            @*
+        <td>
+            <a asp-page="./Edit" asp-route-id="@item.CallId">Edit</a> |
+            <a asp-page="./Details" asp-route-id="@item.CallId">Details</a> |
+            <a asp-page="./Delete" asp-route-id="@item.CallId">Delete</a>
+        </td>*@
+        </tr>
+        }
+    </tbody>
+</table>
