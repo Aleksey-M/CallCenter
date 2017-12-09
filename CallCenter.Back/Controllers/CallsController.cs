@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CallCenter.BackControllers
+namespace CallCenter.Back.Controllers
 {
     public class CallsController : Controller
     {

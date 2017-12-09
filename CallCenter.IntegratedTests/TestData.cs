@@ -1,4 +1,4 @@
-﻿using CallCenter.Data.Model;
+﻿using CallCenter.Back.Data;
 using System;
 using System.Collections.Generic;
 
@@ -16,7 +16,7 @@ namespace CallCenter.IntegratedTests
                     FirstName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Алена",
                     Patronymic = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Викторовна",
                     LastName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Михайлюк",
-                    Gender = Gender.Femaile,
+                    Gender = Gender.Female,
                     PhoneNumber = "+380964521256",
                 };            
             persons.Add(person);

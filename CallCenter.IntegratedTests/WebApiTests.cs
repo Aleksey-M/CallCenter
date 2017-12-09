@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
-using CallCenter.Data.Model;
+using CallCenter.Back.Data;
 using Xunit;
 
 namespace CallCenter.UI.Tests
@@ -105,7 +105,7 @@ namespace CallCenter.UI.Tests
                     FirstName = "Евгения",
                     Patronymic = "Федоровна",
                     LastName = "Полкина",
-                    Gender = Gender.Femaile,
+                    Gender = Gender.Female,
                     PhoneNumber = "+380997586636"                    
                 };
                 using (var response = client.PostAsJsonAsync("api/persons", person).Result)
@@ -252,7 +252,7 @@ namespace CallCenter.UI.Tests
                     allCount = page.Count();
                     Assert.True(allCount > 0, "Недостаточно записей в базе для тестирования");
                 }
-                using (var response = client.GetAsync($"api/persons?Gender={Gender.Femaile}&pagesize=500").Result)
+                using (var response = client.GetAsync($"api/persons?Gender={Gender.Female}&pagesize=500").Result)
                 {
                     Assert.True(response.IsSuccessStatusCode, $"Код запроса отфильрованного списка (Gender.Female) - {response.StatusCode}");
                     var page = response.Content.ReadAsAsync<IEnumerable<PersonsListItem>>().Result;

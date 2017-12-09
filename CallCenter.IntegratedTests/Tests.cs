@@ -1,5 +1,4 @@
-﻿using CallCenter.Data;
-using CallCenter.Data.Model;
+﻿using CallCenter.Back.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;

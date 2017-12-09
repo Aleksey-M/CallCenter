@@ -85,5 +85,11 @@ namespace CallCenter.Back.Controllers
             }
             return BadRequest();
         }
+        [HttpGet, Route("api/createtestdata")]
+        public IActionResult CreateTestData()
+        {
+            DataHelper.AddTestData(_context);
+            return Content("4 records added");
+        }
     }
 }
