@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-namespace CallCenter.Data.Model
+namespace CallCenter.Back.Data
 {
     public class CallsDistinctEqualityComparer : IEqualityComparer<Call>
     {
@@ -27,8 +29,17 @@ namespace CallCenter.Data.Model
     public class Call : IEquatable<Call>
     {
         public Guid CallId { get; set; }
+        [Required(ErrorMessage = "Поле обязательное для заполнения")]
+        [DisplayName("Дата звонка")]
+        [DisplayFormat(DataFormatString = "{0:f}")]
         public DateTime CallDate { get; set; }
+        [Range(0, 1000000, ErrorMessage = "От 0 до 1 000 000")]
+        [DisplayName("Стоимость заказа")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
         public double? OrderCost { get; set; }
+        [DisplayName("Отчет")]
+        [Required(ErrorMessage = "Поле обязательное для заполнения")]
+        [MaxLength(500, ErrorMessage = "Длина строки должна быть до 500 символов")]
         public string CallReport { get; set; }
 
         public Guid? PersonId { get; set; }
@@ -42,16 +53,25 @@ namespace CallCenter.Data.Model
         }
     }
 
-    public enum Gender { All, Male, Femaile }
+    public enum Gender { All, Male, Female }
 
     public class Person : IEquatable<Person> 
-    {
+    {        
         public Guid PersonId { get; set; }
+        [Required(ErrorMessage = "Поле обязательное для заполнения")]
+        [DisplayName("Имя")]
         public string FirstName { get; set; }
+        [DisplayName("Фамилия")]
         public string LastName { get; set; }
+        [DisplayName("Отчество")]
         public string Patronymic { get; set; }
+        [DisplayName("Дата рождения")]
+        [DisplayFormat(DataFormatString = "{0:D}")]
         public DateTime? BirthDate { get; set; }
+        [DisplayName("Пол")]
         public Gender Gender { get; set; }
+        [Required(ErrorMessage = "Поле обязательное для заполнения")]
+        [DisplayName("Номер телефона")]        
         public string PhoneNumber { get; set; }
 
         public IList<Call> Calls { get; set; }

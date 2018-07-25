@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CallCenter.WebApp\CallCenter.WebApp.csproj" />
+    <ProjectReference Include="..\CallCenter.Back\CallCenter.Back.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,4 @@
-﻿using CallCenter.Data;
-using CallCenter.Data.Model;
+﻿using CallCenter.Back.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -52,9 +51,9 @@ namespace CallCenter.IntegratedTests
 
             Assert.NotNull(list);
             Assert.Equal(3, list.Count);
-            Assert.True(list.Any(p => p.LastName == pList[0].LastName));
-            Assert.True(list.Any(p => p.LastName == pList[1].LastName));
-            Assert.True(list.Any(p => p.LastName == pList[2].LastName));
+            Assert.Contains(list, p => p.LastName == pList[0].LastName);
+            Assert.Contains(list, p => p.LastName == pList[1].LastName);
+            Assert.Contains(list, p => p.LastName == pList[2].LastName);
         }
 
         [Fact]
@@ -141,7 +140,7 @@ namespace CallCenter.IntegratedTests
 
             var calls = context.GetCalls(pId);
 
-            Assert.Equal(0, calls.Count);
+            Assert.Empty(calls);
         }
 
         [Fact]
@@ -164,7 +163,7 @@ namespace CallCenter.IntegratedTests
             context.AddCallAsync(callsList[0], pId).Wait();
             var sCalls = context.GetCalls(pId);
 
-            Assert.Equal(1, sCalls.Count);
+            Assert.Single(sCalls);
         }
 
         [Fact]
@@ -239,13 +238,13 @@ namespace CallCenter.IntegratedTests
             //Фильтрация по имени(имени, фамилии или отчеству)
             var filter = new PersonsFilterFields() { NameFilter = persons[0].FirstName };
             var resList = context.GetPersonsAsync(filter).Result;
-            Assert.Equal(1, resList.Count);
+            Assert.Single(resList);
             filter.NameFilter = persons[0].LastName;
             resList = context.GetPersonsAsync(filter).Result;
-            Assert.Equal(1, resList.Count);
+            Assert.Single(resList);
             filter.NameFilter = persons[1].Patronymic;
             resList = context.GetPersonsAsync(filter).Result;
-            Assert.Equal(1, resList.Count);
+            Assert.Single(resList);
         }
 
         [Fact]

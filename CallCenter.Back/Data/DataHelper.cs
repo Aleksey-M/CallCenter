@@ -1,8 +1,7 @@
-﻿using CallCenter.Data.Model;
-using System;
+﻿using System;
 using System.Linq;
 
-namespace CallCenter.Data
+namespace CallCenter.Back.Data
 {
     public static class DataHelper
     {
@@ -15,7 +14,7 @@ namespace CallCenter.Data
                 FirstName = "Алена",
                 Patronymic = "Викторовна",
                 LastName = "Михайлюк",
-                Gender = Gender.Femaile,
+                Gender = Gender.Female,
                 PhoneNumber = "+380964521256",
             });
             context.Persons.Add(new Person

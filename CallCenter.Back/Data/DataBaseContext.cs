@@ -1,7 +1,6 @@
-﻿using CallCenter.Data.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace CallCenter.Data
+namespace CallCenter.Back.Data
 {
     public class DataBaseContext : DbContext
     {

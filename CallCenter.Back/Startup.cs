@@ -1,17 +1,12 @@
-#define RUN_ON_INMEMORY_DB
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿#define RUN_ON_INMEMORY_DB
+using CallCenter.Back.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using CallCenter.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
-namespace CallCenter_WebApp
+namespace CallCenter.Back
 {
     public class Startup
     {
@@ -21,8 +16,8 @@ namespace CallCenter_WebApp
         }
 
         public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().AddJsonOptions(options => {
@@ -35,7 +30,7 @@ namespace CallCenter_WebApp
             services.AddDbContextPool<DataBaseContext>(options => options.UseInMemoryDatabase("VirtualDB"));            
 #else
             var connectionStr = Configuration.GetConnectionString("LocalDb");
-            services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(connectionStr));           
+            services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(connectionStr));
 #endif
         }
 
@@ -44,19 +39,18 @@ namespace CallCenter_WebApp
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();                
+                app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+
+            app.UseDefaultFiles();
             app.UseStaticFiles();
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");                
-            });            
+            });
         }
     }
 }

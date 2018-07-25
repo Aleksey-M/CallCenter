@@ -1,12 +1,9 @@
-﻿using CallCenter.Data;
-using CallCenter.Data.Model;
+﻿using CallCenter.Back.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-
-namespace CallCenter.WebApp.Controllers
+namespace CallCenter.Back.Controllers
 {   
     public class PersonsController : Controller
     {
@@ -87,6 +84,12 @@ namespace CallCenter.WebApp.Controllers
                 return Ok();
             }
             return BadRequest();
+        }
+        [HttpGet, Route("api/createtestdata")]
+        public IActionResult CreateTestData()
+        {
+            DataHelper.AddTestData(_context);
+            return Content("4 records added");
         }
     }
 }

@@ -464,6 +464,20 @@ let app = {
     }
 }
 
+function createTestData() {
+    $.ajax({
+        url: '/api/createtestdata',
+        type: 'GET',
+        dataType: 'text',
+        success: function () {
+            location.reload();
+        },
+        error: function (x, y, z) {
+            alert(x + '\n' + y + '\n' + z);
+        }
+    });
+}
+
 $(document).ready(function () {
-    app.loadPersonsList();
+    app.loadPersonsList();    
 });

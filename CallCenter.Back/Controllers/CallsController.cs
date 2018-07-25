@@ -1,11 +1,10 @@
-﻿using CallCenter.Data;
-using CallCenter.Data.Model;
+﻿using CallCenter.Back.Data;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CallCenter.WebApp.Controllers
+namespace CallCenter.Back.Controllers
 {
     public class CallsController : Controller
     {
