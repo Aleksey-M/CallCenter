@@ -260,4 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 
-CallCenter.Back/wwwroot/lib
+CallCenter.Back/wwwroot/lib/**.*
