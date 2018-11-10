@@ -13,7 +13,7 @@ namespace CallCenter.IntegratedTests
     {
         private static DataBaseContext CreateCleareInMemoryContext()
         {
-            /*
+            
             var serviceProvider = new ServiceCollection()
                 .AddEntityFrameworkInMemoryDatabase()
                 .BuildServiceProvider();
@@ -22,21 +22,24 @@ namespace CallCenter.IntegratedTests
             var context = new DataBaseContext(b.Options);
             context.Database.EnsureCreated();
             return context;
-            */
-            var serviceProvider = new ServiceCollection()
+            
+           /* var serviceProvider = new ServiceCollection()
                 .AddEntityFrameworkSqlServer()
                 .BuildServiceProvider();
             var b = new DbContextOptionsBuilder<DataBaseContext>();
-            b.UseSqlServer("Server=.\\SQLExpress;AttachDbFilename={AppDomain.CurrentDomain.BaseDirectory}\\CallCenterBase.mdf;Database=CallCenterDb; Trusted_Connection=Yes;").UseInternalServiceProvider(serviceProvider);
+            b.UseSqlServer("Server=.\\SQLEXPRESS;AttachDbFilename={AppDomain.CurrentDomain.BaseDirectory}\\CallCenterBase.mdf;Database=CallCenterDb; Trusted_Connection=Yes;").UseInternalServiceProvider(serviceProvider);
             //$"Data Source=(localdb)\v11.0;AttachDbFileName={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CallCenterBase.mdf")};Integrated Security=true;
             //Server=ANTARES\\SQLEXPRESS;Database=CallCenter;Trusted_Connection=True;
             //Server=.\\SQLExpress;AttachDbFilename={AppDomain.CurrentDomain.BaseDirectory}\\CallCenterBase.mdf;Database=CallCenterDb; Trusted_Connection=Yes;
+           
+            
             var context = new DataBaseContext(b.Options);
             context.Database.EnsureCreated();
             context.Calls.RemoveRange(context.Calls);
             context.Persons.RemoveRange(context.Persons);
             context.SaveChanges();
             return context;
+            */
         }
         
         [Fact]

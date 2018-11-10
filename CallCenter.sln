@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallCenter.IntegratedTests", "CallCenter.IntegratedTests\CallCenter.IntegratedTests.csproj", "{42689DF0-E1A2-4955-A55A-3EDA5FBDAE9E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallCenter.Back", "CallCenter.Back\CallCenter.Back.csproj", "{E61403F6-3208-4314-B949-E34D28657933}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallCenter.Back", "CallCenter.Back\CallCenter.Back.csproj", "{937CFEC1-322F-41C9-AFEF-D82F08F1A8FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{42689DF0-E1A2-4955-A55A-3EDA5FBDAE9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42689DF0-E1A2-4955-A55A-3EDA5FBDAE9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42689DF0-E1A2-4955-A55A-3EDA5FBDAE9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E61403F6-3208-4314-B949-E34D28657933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E61403F6-3208-4314-B949-E34D28657933}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E61403F6-3208-4314-B949-E34D28657933}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E61403F6-3208-4314-B949-E34D28657933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{937CFEC1-322F-41C9-AFEF-D82F08F1A8FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{937CFEC1-322F-41C9-AFEF-D82F08F1A8FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{937CFEC1-322F-41C9-AFEF-D82F08F1A8FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{937CFEC1-322F-41C9-AFEF-D82F08F1A8FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

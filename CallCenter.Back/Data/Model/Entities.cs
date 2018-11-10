@@ -89,8 +89,7 @@ namespace CallCenter.Back.Data
 
         public override bool Equals(object obj)
         {
-            var person = obj as Person;
-            return person == null ? false : Equals(person);            
+            return !(obj is Person person) ? false : Equals(person);
         }
 
         public override int GetHashCode()
