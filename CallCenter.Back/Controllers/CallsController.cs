@@ -19,7 +19,7 @@ namespace CallCenter.Back.Controllers
         {
             var pers = _context.GetPerson(pid);
             if (pers == null) return BadRequest();
-            var calls = _context.GetCalls(pid);
+            var calls = await _context.GetCalls(pid);
             if (calls.FirstOrDefault(c => c.CallId == cid) == null) return BadRequest();
             await _context.DeleteCallAsync(cid);
             return Ok();
@@ -41,10 +41,10 @@ namespace CallCenter.Back.Controllers
         [HttpPut, Route("api/persons/{pid}/calls")]
         public async Task<IActionResult> UpdateCall(Guid pid, [FromBody] Call call)
         {
-            var pers = _context.GetPerson(pid);
+            var pers = await _context.GetPerson(pid);
             if (pers == null) return BadRequest();
 
-            if (!_context.GetCalls(pid).Exists(c => c.CallId == call.CallId)) return BadRequest();
+            if (!(await _context.GetCalls(pid)).Exists(c => c.CallId == call.CallId)) return BadRequest();
 
             var validator = new CallValidator();
             var valRes = validator.Validate(call);
@@ -59,8 +59,8 @@ namespace CallCenter.Back.Controllers
         [HttpGet, Route("api/persons/{pid}/calls")]
         public async Task<IActionResult> GetCalls(Guid pid)
         {
-            if (_context.GetPerson(pid) == null) return BadRequest();
-            return Ok(await Task.Run(() => _context.GetCalls(pid)));
+            if ((await _context.GetPerson(pid)) == null) return BadRequest();
+            return Ok(await _context.GetCalls(pid));
         }
     }
 }

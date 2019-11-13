@@ -4,18 +4,18 @@ using System;
 using System.Threading.Tasks;
 
 namespace CallCenter.Back.Controllers
-{   
+{
     public class PersonsController : Controller
     {
-        private readonly DataBaseContext _context;        
+        private readonly DataBaseContext _context;
         public PersonsController(DataBaseContext context)
         {
-            _context = context;           
+            _context = context;
         }
-        
+
         [HttpGet, Route("api/persons/count")]
         public async Task<IActionResult> GetPersonsCount([FromQuery] PersonsFilterFields filters)
-        {            
+        {
             if (filters != null)
             {
                 var validator = new PersonsFilterFieldsValidator();
@@ -25,7 +25,7 @@ namespace CallCenter.Back.Controllers
                     return BadRequest();
                 }
             }
-            return Ok(await _context.GetPersonsCountAsync(filters ?? PersonsFilterFields.Default));           
+            return Ok(await _context.GetPersonsCountAsync(filters ?? PersonsFilterFields.Default));
         }
 
         [HttpGet, Route("api/persons")]
@@ -43,16 +43,16 @@ namespace CallCenter.Back.Controllers
 
         [HttpGet, Route("api/persons/{id}")]
         public async Task<IActionResult> GetPerson(Guid id)
-        {            
-            var p = await Task.Run(() => _context.GetPerson(id));
-            if (p == null) return NotFound();            
+        {
+            var p = await _context.GetPerson(id);
+            if (p == null) return NotFound();
             return Ok(p);
         }
 
         [HttpDelete, Route("api/persons/{id}")]
         public async Task<IActionResult> DeletePerson(Guid id)
         {
-            var p = await Task.Run(() => _context.GetPerson(id));
+            var p = await _context.GetPerson(id);
             if (p == null) return NotFound();
             await _context.DeletePersonAsync(id);
             return Ok();
@@ -60,12 +60,12 @@ namespace CallCenter.Back.Controllers
 
         [HttpPost, Route("api/persons")]
         public async Task<IActionResult> AddPerson([FromBody] Person person)
-        {            
+        {
             var validator = new PersonValidator();
             var valRes = validator.Validate(person);
             if (valRes.IsValid)
             {
-                var newId = await _context.AddPersonAsync(person);                
+                var newId = await _context.AddPersonAsync(person);
                 return Ok();
             }
             return BadRequest();
@@ -78,13 +78,14 @@ namespace CallCenter.Back.Controllers
             var valRes = validator.Validate(person);
             if (valRes.IsValid)
             {
-                var p = await Task.Run(() => _context.GetPerson(person.PersonId));
+                var p = await _context.GetPerson(person.PersonId);
                 if (p == null) return NotFound();
                 await _context.UpdatePersonAsync(person);
                 return Ok();
             }
             return BadRequest();
         }
+
         [HttpGet, Route("api/createtestdata")]
         public IActionResult CreateTestData()
         {

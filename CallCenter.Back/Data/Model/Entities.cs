@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CallCenter.Back.Data
 {
@@ -43,6 +44,7 @@ namespace CallCenter.Back.Data
         public string CallReport { get; set; }
 
         public Guid? PersonId { get; set; }
+        [JsonIgnore]
         public Person Person { get; set; }
 
         public bool Equals(Call other)
@@ -74,7 +76,7 @@ namespace CallCenter.Back.Data
         [DisplayName("Номер телефона")]        
         public string PhoneNumber { get; set; }
 
-        public IList<Call> Calls { get; set; }
+        public List<Call> Calls { get; set; }
 
         public bool Equals(Person other)
         {            

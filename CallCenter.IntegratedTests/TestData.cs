@@ -1,8 +1,9 @@
 ﻿using CallCenter.Back.Data;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
-namespace CallCenter.IntegratedTests
+namespace CallCenter
 {
     public static class TestData
     {
@@ -12,7 +13,7 @@ namespace CallCenter.IntegratedTests
             //
             var person = new Person() {
                     PersonId = generateId ? Guid.NewGuid() : Guid.Empty,
-                    BirthDate = DateTime.Parse("20.05.1990").AddYears(DateTime.Now.Year - 1990 - 27),//27
+                    BirthDate = DateTime.Parse("20.05.1990", CultureInfo.GetCultureInfo("ru-RU")).AddYears(DateTime.Now.Year - 1990 - 27),//27
                     FirstName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Алена",
                     Patronymic = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Викторовна",
                     LastName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Михайлюк",
@@ -24,7 +25,7 @@ namespace CallCenter.IntegratedTests
             person = new Person()
             {
                 PersonId = generateId ? Guid.NewGuid() : Guid.Empty,
-                BirthDate = DateTime.Parse("18.03.1998").AddYears(DateTime.Now.Year - 1998 - 19), //19
+                BirthDate = DateTime.Parse("18.03.1998", CultureInfo.GetCultureInfo("ru-RU")).AddYears(DateTime.Now.Year - 1998 - 19), //19
                 FirstName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Евгений",
                 Patronymic = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Павлович",
                 LastName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Мостовой",
@@ -36,7 +37,7 @@ namespace CallCenter.IntegratedTests
             person = new Person()
             {
                 PersonId = generateId ? Guid.NewGuid() : Guid.Empty,
-                BirthDate = DateTime.Parse("7.11.2004").AddYears(DateTime.Now.Year - 2004 - 13), //13
+                BirthDate = DateTime.Parse("7.11.2004", CultureInfo.GetCultureInfo("ru-RU")).AddYears(DateTime.Now.Year - 2004 - 13), //13
                 FirstName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Ольга",
                 Patronymic = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Владимировна",
                 LastName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Кожемякина",
