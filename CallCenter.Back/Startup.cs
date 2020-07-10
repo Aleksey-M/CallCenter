@@ -20,9 +20,7 @@ namespace CallCenter.Back
         {
             services.AddLogging();
             services.AddControllers();
-
             services.AddDbContext<DataBaseContext>(options => options.UseSqlite("Data Source=CallCenter.db;"));
-
             services.AddSwaggerDocument();
         }
 
