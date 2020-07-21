@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CallCenter.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,24 +7,6 @@ using System.Threading.Tasks;
 
 namespace CallCenter.Back.Data
 {
-
-    public class PersonsFilterFields
-    {
-        public int PageNo { get; set; } = 1;
-        public int PageSize { get; set; } = 25;
-        public Gender Gender { get; set; } = Gender.All;
-        public string NameFilter { get; set; } = string.Empty;
-        public int? MaxAge { get; set; } = null;
-        public int? MinAge { get; set; } = null;
-        public int MinDaysAfterLastCall { get; set; } = 0;
-        public override string ToString()
-        {
-            return $"Filter fields: PageNo:{PageNo}; PageSize:{PageSize}; Gender:{Gender}; NameFilter:{NameFilter}; MaxAge:{MaxAge}; MinAge:{MinAge}; MinDaysAfterLastCall:{MinDaysAfterLastCall}";
-        }
-
-        public static PersonsFilterFields Default => new PersonsFilterFields();
-    }
-
     public static class DataBaseContextExtensions
     {
         public static async Task<Guid> AddPersonAsync(this DataBaseContext context, Person person)

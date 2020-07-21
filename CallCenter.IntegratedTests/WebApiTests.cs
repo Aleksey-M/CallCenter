@@ -1,4 +1,4 @@
-﻿using CallCenter.Back.Data;
+﻿using CallCenter.Model;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -35,7 +35,7 @@ namespace CallCenter
                 var pList = await response.Content.ReadAsAsync<IEnumerable<PersonsListItem>>();
                 foreach (var pers in pList)
                 {
-                    var r = await client.DeleteAsync($"api/persons/{pers.Id}");
+                    _ = await client.DeleteAsync($"api/persons/{pers.Id}");
                 }
             }
         }

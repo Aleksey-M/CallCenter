@@ -1,4 +1,5 @@
 ﻿using CallCenter.Back.Data;
+using CallCenter.Model;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -65,7 +66,7 @@ namespace CallCenter.Back.Controllers
             var valRes = validator.Validate(person);
             if (valRes.IsValid)
             {
-                var newId = await _context.AddPersonAsync(person);
+                _ = await _context.AddPersonAsync(person);
                 return Ok();
             }
             return BadRequest();
@@ -86,11 +87,11 @@ namespace CallCenter.Back.Controllers
             return BadRequest();
         }
 
-        [HttpGet, Route("api/createtestdata")]
-        public IActionResult CreateTestData()
+        [HttpPost, Route("api/createtestdata")]
+        public async Task<IActionResult> CreateTestData()
         {
-            DataHelper.AddTestData(_context);
-            return Content("4 records added");
+            await DataHelper.AddTestData(_context);
+            return Ok("Test data was added");
         }
     }
 }

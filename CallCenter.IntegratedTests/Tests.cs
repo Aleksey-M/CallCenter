@@ -1,4 +1,5 @@
 ﻿using CallCenter.Back.Data;
+using CallCenter.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;

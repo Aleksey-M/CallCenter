@@ -1,4 +1,5 @@
 ﻿using CallCenter.Back.Data;
+using CallCenter.Model;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace CallCenter.Back.Controllers
         private readonly DataBaseContext _context;
         public CallsController(DataBaseContext context)
         {
-            _context = context;            
+            _context = context;
         }
 
         [HttpDelete, Route("api/persons/{pid}/calls/{cid}")]

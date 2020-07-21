@@ -1,4 +1,4 @@
-﻿using CallCenter.Back.Data;
+﻿using CallCenter.Model;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,15 +11,16 @@ namespace CallCenter
         {
             var persons = new List<Person>();
             //
-            var person = new Person() {
-                    PersonId = generateId ? Guid.NewGuid() : Guid.Empty,
-                    BirthDate = DateTime.Parse("20.05.1990", CultureInfo.GetCultureInfo("ru-RU")).AddYears(DateTime.Now.Year - 1990 - 27),//27
-                    FirstName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Алена",
-                    Patronymic = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Викторовна",
-                    LastName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Михайлюк",
-                    Gender = Gender.Female,
-                    PhoneNumber = "+380964521256",
-                };            
+            var person = new Person()
+            {
+                PersonId = generateId ? Guid.NewGuid() : Guid.Empty,
+                BirthDate = DateTime.Parse("20.05.1990", CultureInfo.GetCultureInfo("ru-RU")).AddYears(DateTime.Now.Year - 1990 - 27),//27
+                FirstName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Алена",
+                Patronymic = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Викторовна",
+                LastName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Михайлюк",
+                Gender = Gender.Female,
+                PhoneNumber = "+380964521256",
+            };
             persons.Add(person);
             //---------------------
             person = new Person()
@@ -30,8 +31,8 @@ namespace CallCenter
                 Patronymic = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Павлович",
                 LastName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Мостовой",
                 Gender = Gender.Male,
-                PhoneNumber = "+380502486363",               
-            };            
+                PhoneNumber = "+380502486363",
+            };
             persons.Add(person);
             //---------------------
             person = new Person()
@@ -42,8 +43,8 @@ namespace CallCenter
                 Patronymic = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Владимировна",
                 LastName = uniqNames ? Guid.NewGuid().ToString().Substring(0, 8) : "Кожемякина",
                 Gender = Gender.All,
-                PhoneNumber = "+380954562312",                
-            };            
+                PhoneNumber = "+380954562312",
+            };
             persons.Add(person);
 
             return persons;

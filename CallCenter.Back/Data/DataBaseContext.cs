@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CallCenter.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace CallCenter.Back.Data
 {
@@ -6,8 +7,8 @@ namespace CallCenter.Back.Data
     {
         public DbSet<Call> Calls { get; set; }
         public DbSet<Person> Persons { get; set; }
-                
-        public DataBaseContext(DbContextOptions<DataBaseContext> options): base(options){}
+
+        public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,11 +28,11 @@ namespace CallCenter.Back.Data
 
             modelBuilder.Entity<Person>()
                 .HasMany(p => p.Calls)
-                .WithOne(c => c.Person)
-                .HasForeignKey(c=>c.PersonId)
-                .OnDelete(DeleteBehavior.Cascade);            
+                .WithOne()
+                .HasForeignKey(c => c.PersonId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
-        }             
-    }  
+        }
+    }
 }

@@ -467,7 +467,7 @@ let app = {
 function createTestData() {
     $.ajax({
         url: '/api/createtestdata',
-        type: 'GET',
+        type: 'POST',
         dataType: 'text',
         success: function () {
             location.reload();

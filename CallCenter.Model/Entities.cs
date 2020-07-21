@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
-namespace CallCenter.Back.Data
+namespace CallCenter.Model
 {
     public class CallsDistinctEqualityComparer : IEqualityComparer<Call>
     {
@@ -44,8 +43,6 @@ namespace CallCenter.Back.Data
         public string CallReport { get; set; }
 
         public Guid? PersonId { get; set; }
-        [JsonIgnore]
-        public Person Person { get; set; }
 
         public bool Equals(Call other)
         {
@@ -53,6 +50,15 @@ namespace CallCenter.Back.Data
                 OrderCost == other.OrderCost &&
                 CallReport.Equals(other.CallReport);
         }
+
+        public Call Clone() => new Call
+        {
+            CallId = this.CallId,
+            PersonId = this.PersonId,
+            CallDate = this.CallDate,
+            CallReport = this.CallReport,
+            OrderCost = this.OrderCost
+        };
     }
 
     public enum Gender { All, Male, Female }
@@ -61,11 +67,11 @@ namespace CallCenter.Back.Data
     {        
         public Guid PersonId { get; set; }
         [Required(ErrorMessage = "Поле обязательное для заполнения")]
-        [DisplayName("Имя")]
+        [DisplayName("Имя"), StringLength(50)]
         public string FirstName { get; set; }
-        [DisplayName("Фамилия")]
+        [DisplayName("Фамилия"), StringLength(50)]
         public string LastName { get; set; }
-        [DisplayName("Отчество")]
+        [DisplayName("Отчество"), StringLength(50)]
         public string Patronymic { get; set; }
         [DisplayName("Дата рождения")]
         [DisplayFormat(DataFormatString = "{0:D}")]
@@ -73,7 +79,7 @@ namespace CallCenter.Back.Data
         [DisplayName("Пол")]
         public Gender Gender { get; set; }
         [Required(ErrorMessage = "Поле обязательное для заполнения")]
-        [DisplayName("Номер телефона")]        
+        [DisplayName("Номер телефона"), StringLength(20)]        
         public string PhoneNumber { get; set; }
 
         public List<Call> Calls { get; set; }
@@ -91,13 +97,25 @@ namespace CallCenter.Back.Data
 
         public override bool Equals(object obj)
         {
-            return !(obj is Person person) ? false : Equals(person);
+            return obj is Person person && Equals(person);
         }
 
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
+
+        public Person Clone() => new Person
+        {
+            PersonId = this.PersonId,
+            BirthDate = this.BirthDate,
+            FirstName = this.FirstName,
+            LastName = this.LastName,
+            Patronymic = this.Patronymic,
+            Gender = this.Gender,
+            PhoneNumber = this.PhoneNumber,
+            Calls = null
+        };
     }
         
 }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace CallCenter.Back.Data
+namespace CallCenter.Model
 {
     public class PersonsFilterFieldsValidator : AbstractValidator<PersonsFilterFields>
     {

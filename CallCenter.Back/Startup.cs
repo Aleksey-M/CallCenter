@@ -29,20 +29,20 @@ namespace CallCenter.Back
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseWebAssemblyDebugging();
             }
 
-            app.UseDefaultFiles();
             app.UseStaticFiles();
-
-            app.UseRouting();
-            app.UseAuthorization();
+            app.UseBlazorFrameworkFiles();
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
 
+            app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToFile("index.html");
             });
         }
     }

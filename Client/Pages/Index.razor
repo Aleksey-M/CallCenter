@@ -1,0 +1,510 @@
+﻿@page "/"
+
+@using System.Net.Http
+@using CallCenter.Model
+@inject HttpClient Http
+@inject IJSRuntime JsRuntime;
+
+<div id="container" class="container-fluid" style="font-size:smaller">
+    <div class="page-header row">
+        <div class="col-md-10">
+            <h2>Клиенты фирмы</h2>
+        </div>
+        <div class="col-md-2">
+            <button type="button" style="margin-top:7px; margin-left:4px; float:right" @onclick="_ => _about = true" class="btn btn-sm btn-info" title="О программе">?</button>
+            <button class="btn btn-info btn-sm" style="margin-top:7px; float:right" @onclick="AddTestData" disabled="@(_editedPerson != null || _editedCall != null)" title="Добавить тестовые данные">+</button>
+        </div>
+    </div>
+
+    @if (_about)
+    {
+        <div class="row">
+            <div class="col-md-6 offset-3">
+                <div class="card">
+                    <div class="card-header">
+                        <button type="button" class="close" @onclick="_ => _about = false">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="card-title">О проекте "Call Center"</h4>
+                    </div>
+                    <div class="card-body">
+                        <p><b>Call Center</b> - информационная система для работы с клиентами фирмы </p>
+                        <p>Функции системы:</p>
+                        <ul>
+                            <li>Хранение данных клиентов: Имена, даты рождения, пол и т.д.</li>
+                            <li>Фильтрация клиентов по ряду полей, в том числе, по периоду последнего звонка</li>
+                            <li>Постраничный вывод списка клиентов</li>
+                            <li>Хранение отчетов о предыдущих звонках</li>
+                            <li>Обновление данных без перезагрузок страницы</li>
+                        </ul>
+
+                        <p>Мамиконян Алексей, 2017</p>
+                        <p>Blazor-FE, 2020</p>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" style="float:right;" @onclick="_ => _about = false">Закрыть</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <EditForm Model="_filters" OnValidSubmit="Search">
+                    <div title="Фильтрация" class="form-inline filters">
+                        <div>
+                            <label for="nameFilter">Фамилия, имя или отчество:</label>
+                            <InputText @bind-Value="_filters.NameFilter" class="form-control" id="nameFilter" placeholder="ФИО"></InputText>
+                        </div>
+                        <div>
+                            <label for="gender">Пол:</label>
+                            <InputSelect @bind-Value="_filters.Gender" id="gender" class="form-control">
+                                <option value="@Gender.All" selected="selected">Все</option>
+                                <option value="@Gender.Male">М</option>
+                                <option value="@Gender.Female">Ж</option>
+                            </InputSelect>
+                        </div>
+                        <div>
+                            <label for="minAge">Мин. возраст:</label>
+                            <InputNumber @bind-Value="_filters.MinAge" min="0" class="form-control" id="minAge" title="Минимальный возраст"></InputNumber>
+                        </div>
+                        <div>
+                            <label for="maxAge">Макс. возраст:</label>
+                            <InputNumber @bind-Value="_filters.MaxAge" min="0" class="form-control" id="maxAge" title="Максимальный возраст"></InputNumber>
+                        </div>
+                        <div>
+                            <label for="minDaysAfterLastCall">Пред. звонок (дней):</label>
+                            <InputNumber @bind-Value="_filters.MinDaysAfterLastCall" class="form-control" id="minDaysAfterLastCall" title="Не менее дней после последнего звонка"></InputNumber>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-sm btn-secondary" disabled="@(_editedPerson != null || _editedCall != null)">Поиск</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:20px">
+            <div class="col-md-5" disabled="@(_editedPerson != null || _editedCall != null)">
+
+                <div>
+                    <div class="pagination-sm form-inline" style="width:330px;margin:auto;padding-bottom:5px;">
+                        <div class="page-item"><button @onclick="PrevPage" class="page-link" disabled="@(_editedPerson != null || _editedCall != null)">&lt;</button></div>
+                        <div class="page-item disabled"><span class="page-link">[@_filters.PageNo из @PagesCount]</span></div>
+                        <div class="page-item">
+                            <span class="page-link">
+                                Записей на страницу:
+                                <select @bind="_filters.PageSize">
+                                    <option value="30">30</option>
+                                    <option value="25">25</option>
+                                    <option value="20">20</option>
+                                    <option value="15">15</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="page-item"><button @onclick="NextPage" class="page-link" disabled="@(_editedPerson != null || _editedCall != null)">&gt;</button></div>
+                    </div>
+                </div>
+                <table class="table table-hover" disabled="@(_editedPerson != null || _editedCall != null)">
+                    <thead>
+                        <tr>
+                            <th>Фамилия</th>
+                            <th>Имя</th>
+                            <th>Отчество</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pi in _filteredPersons)
+                        {
+                            <tr @onclick="@(_ => SelectPerson(pi.Id))" style="background-color: @(_selectedPerson?.PersonId == pi.Id ? "lightgreen" : "")">
+                                <td>@pi.LastName</td>
+                                <td>@pi.FirstName</td>
+                                <td>@pi.Patronymic</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3"><strong>Записей найдено: @_totalPersons</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="col-md-7">
+                @if (_editedPerson != null)
+                {
+                    <div class="card">
+                        <div class="card-header">
+                            @((_editedPerson != null && _editedPerson.PersonId != Guid.Empty) ? "Редактирование данных клиента" : "Добавление нового клиента")
+                        </div>
+                        <EditForm Model="_editedPerson" OnValidSubmit="SavePerson">
+                            <div class="card-body">
+                                <DataAnnotationsValidator />
+
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label for="cName">Имя* <small>(до 50 символов)</small></label>
+                                        <InputText @bind-Value="_editedPerson.FirstName" class="form-control" id="cName"></InputText>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="cSurname">Фамилия <small>(до 50 символов)</small></label>
+                                        <InputText @bind-Value="_editedPerson.LastName" class="form-control" id="cSurname"></InputText>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="cPatronymic">Отчество <small>(до 50 символов)</small></label>
+                                        <InputText @bind-Value="_editedPerson.Patronymic" class="form-control" id="cPatronymic"></InputText>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="cBirthDate">Дата рождения</label>
+                                        <InputDate @bind-Value="_editedPerson.BirthDate" class="form-control" id="cBirthDate"></InputDate>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="cGender">Пол</label>
+                                        <InputSelect @bind-Value="_editedPerson.Gender" class="form-control" id="cGender">
+                                            <option value="@Gender.All">Не указано</option>
+                                            <option value="@Gender.Male">Мужской</option>
+                                            <option value="@Gender.Female">Женский</option>
+                                        </InputSelect>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="cPhoneNumber">Номер телефона* <small>до 20 символов</small></label>
+                                        <InputText @bind-Value="_editedPerson.PhoneNumber" id="cPhoneNumber" class="form-control"></InputText>
+
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group-sm">
+                                    <button type="submit" class="btn btn-success btn-sm">Сохранить</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" @onclick="_ => _editedPerson = null">Отмена</button>
+                                </div>
+                            </div>
+                        </EditForm>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="card">
+                        <div class="card-header">
+                            Инфрмация о выделенном клиенте
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <tr>
+                                    <th>ФИО:</th>
+                                    <td>@($"{_selectedPerson?.LastName} {_selectedPerson?.FirstName} {_selectedPerson?.Patronymic}")</td>
+                                </tr>
+                                <tr>
+                                    <th>Дата рожденья:</th>
+                                    <td>
+                                        @if (_selectedPerson != null)
+                                        {
+                                            @(_selectedPerson?.BirthDate?.ToString("yyyy.MM.dd") ?? "не указано")
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Пол:</th>
+                                    <td>
+                                        @if (_selectedPerson != null)
+                                        {
+                                            @(_selectedPerson.Gender switch
+                                            {
+                                                Gender.Female => "Ж",
+                                                Gender.Male => "М",
+                                                _ => "не указано"
+                                            })
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Телефон:</th>
+                                    <td>@_selectedPerson?.PhoneNumber</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="btn-group-sm" style="float:left">
+                                <button type="button" class="btn btn-primary btn-sm" @onclick="ShowEditPersonForm" disabled="@(_editedCall != null)">Редактировать</button>
+                                <button type="button" class="btn btn-danger btn-sm" @onclick="DeletePerson" disabled="@(_editedCall != null)">Удалить</button>
+                            </div>
+                            <div style="float:right">
+                                <button class="btn btn-sm btn-info" @onclick="ShowAddNewPersonForm" disabled="@(_editedCall != null)">Добавить клиента</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (_editedCall != null)
+                    {
+                        <div class="card">
+                            <div class="card-header">
+                                @((_editedCall != null && _editedCall.CallId != Guid.Empty) ? "Редактирование отчета о звонке" : "Добавление нового отчета")
+                            </div>
+                            <EditForm Model="_editedCall" OnValidSubmit="SaveCall">
+                                <div class="card-body">
+                                    <DataAnnotationsValidator />
+
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label for="crCallDate">Дата звонка*</label>
+                                            <InputDate @bind-Value="_editedCall.CallDate" id="crCallDate" class="form-control"></InputDate>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="crCallReport">Отчет* <small>от 5 до 500 символов</small></label>
+                                            <InputTextArea @bind-Value="_editedCall.CallReport" id="crCallReport" cols="5" class="form-control"></InputTextArea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="crOrderCost">Цена заказа</label>
+                                            <InputNumber @bind-Value="_editedCall.OrderCost" step="0.01" class="form-control" id="crOrderCost"></InputNumber>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="btn-group-sm">
+                                        <button type="submit" class="btn btn-success btn-sm">Сохранить</button>
+                                        <button type="button" class="btn btn-secondary btn-sm" @onclick="_ => _editedCall = null">Отмена</button>
+                                    </div>
+                                </div>
+                            </EditForm>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card" style="margin-top:20px">
+                            <div class="card-header">
+                                История звонков
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Дата</th>
+                                            <th>Отчет</th>
+                                            <th>Стоимость заказа</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var call in _selectedPersonCalls)
+                                        {
+                                            <tr>
+                                                <td>@call.CallDate.ToString("yyyy.MM.dd")</td>
+                                                <td>@call.CallReport</td>
+                                                <td>@call.OrderCost?.ToString("N2")</td>
+                                                <td>
+                                                    <div class="btn-group-sm">
+                                                        <button class="btn btn-sm btn-secondary" title="Редактировать отчет о звонке" @onclick="_ => ShowEditCallForm(call.CallId)"><span class="oi oi-pencil"></span></button>
+                                                        <button class="btn btn-sm btn-danger" title="Удалить отчет о звонке" @onclick="async _ => await DeleteCall(call.CallId)"><span class="oi oi-trash"></span></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary btn-sm" @onclick="ShowAddNewCallForm">Добавить отчет</button>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code{
+
+    private async Task AddTestData()
+    {
+        await Http.PostAsJsonAsync<object>("/api/createtestdata", null);
+        await LoadPersons();
+        _filters.PageNo = 1;
+    }
+
+    private int _totalPersons = 0;
+    private int PagesCount => _totalPersons > 0 ? (_totalPersons - 1) / _filters.PageSize + 1 : 0;
+    private PersonsFilterFields _filters = new PersonsFilterFields();
+    private IEnumerable<PersonsListItem> _filteredPersons = Enumerable.Empty<PersonsListItem>();
+    private Person _selectedPerson = null;
+    private IEnumerable<Call> _selectedPersonCalls = Enumerable.Empty<Call>();
+
+    private async Task SelectPerson(Guid id)
+    {
+        if (_editedCall != null || _editedPerson != null) return;
+
+        _selectedPerson = await Http.GetFromJsonAsync<Person>($@"/api/persons/{id}");
+        if (_selectedPerson != null)
+        {
+            _selectedPersonCalls = await Http.GetFromJsonAsync<List<Call>>($@"api/persons/{id}/calls/");
+        }
+        else
+        {
+            _selectedPersonCalls = Enumerable.Empty<Call>();
+        }
+    }
+
+    private async Task Search()
+    {
+        _filters.PageNo = 1;
+        await LoadPersons();
+    }
+
+    private async Task LoadPersons()
+    {
+        _totalPersons = await Http.GetFromJsonAsync<int>("/api/persons/count" + _filters.ToParams());
+        if (_filters.PageNo > PagesCount)
+        {
+            _filters.PageNo = 1;
+        }
+
+        _filteredPersons = await Http.GetFromJsonAsync<List<PersonsListItem>>("/api/persons" + _filters.ToParams());
+        _selectedPerson = null;
+        _selectedPersonCalls = Enumerable.Empty<Call>();
+    }
+
+    private async Task NextPage()
+    {
+        if (PagesCount > _filters.PageNo)
+        {
+            _filters.PageNo++;
+            await LoadPersons();
+        }
+    }
+
+    private async Task PrevPage()
+    {
+        if (_filters.PageNo > 1)
+        {
+            _filters.PageNo--;
+            await LoadPersons();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPersons();
+    }
+
+    private async Task DeletePerson()
+    {
+        if (_selectedPerson == null) return;
+
+        bool confirm = await JsRuntime.InvokeAsync<bool>("window.confirm", "Удалить клиента?");
+
+        if (confirm)
+        {
+            await Http.DeleteAsync($@"/api/persons/{_selectedPerson.PersonId}");
+            await Search();
+        }
+    }
+
+    private Person _editedPerson = null;
+    private Call _editedCall = null;
+
+    private void ShowEditPersonForm()
+    {
+        if (_selectedPerson == null) return;
+        _editedPerson = _selectedPerson.Clone();
+    }
+
+    private void ShowAddNewPersonForm()
+    {
+        _editedPerson = new Person
+        {
+            PersonId = Guid.Empty
+        };
+    }
+
+    private async Task SavePerson()
+    {
+        if (_editedPerson == null) return;
+
+        if (_editedPerson.PersonId != Guid.Empty)
+        {
+            await Http.PutAsJsonAsync(@"/api/persons", _editedPerson);
+        }
+        else
+        {
+            await Http.PostAsJsonAsync(@"/api/persons", _editedPerson);
+        }
+
+        _editedPerson = null;
+        _selectedPerson = null;
+        await Search();
+    }
+
+    private async Task DeleteCall(Guid callId)
+    {
+        if (_selectedPerson == null) return;
+
+        var call = _selectedPersonCalls.SingleOrDefault(c => c.CallId == callId);
+
+        if (call != null)
+        {
+            bool confirm = await JsRuntime.InvokeAsync<bool>("window.confirm", "Удалить отчет о звонке?");
+
+            if (confirm)
+            {
+                await Http.DeleteAsync($@"api/persons/{_selectedPerson.PersonId}/calls/{callId}");
+                _selectedPersonCalls = _selectedPersonCalls.Where(c => c.CallId != callId).ToList();
+            }
+        }
+    }
+
+    private void ShowEditCallForm(Guid callId)
+    {
+        if (_selectedPerson == null) return;
+
+        var call = _selectedPersonCalls.SingleOrDefault(c => c.CallId == callId);
+        if (call != null)
+        {
+            _editedCall = call.Clone();
+        }
+    }
+
+    private void ShowAddNewCallForm()
+    {
+        if (_selectedPerson == null) return;
+
+        _editedCall = new Call
+        {
+            CallId = Guid.Empty,
+            CallDate = DateTime.Now.Date
+        };
+    }
+
+    private async Task SaveCall()
+    {
+        if (_selectedPerson == null) return;
+        if (_editedCall == null) return;
+
+        if (_editedCall.CallId != Guid.Empty)
+        {
+            await Http.PutAsJsonAsync($@"api/persons/{_selectedPerson.PersonId}/calls", _editedCall);
+        }
+        else
+        {
+            await Http.PostAsJsonAsync($@"api/persons/{_selectedPerson.PersonId}/calls", _editedCall);
+        }
+
+        _editedCall = null;
+        _selectedPersonCalls = await Http.GetFromJsonAsync<List<Call>>($@"api/persons/{_selectedPerson.PersonId}/calls/");
+    }
+
+    private bool _about = false;
+}
